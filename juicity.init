@@ -1,0 +1,60 @@
+#!/system/bin/sh
+
+BIN_NAME="juicity-client"
+MODULE_NAME="Juicity"
+MODULE_PATH="/data/adb/modules/${MODULE_NAME}"
+
+umask 022
+
+CAT=/system/bin/cat
+KILL=/system/bin/kill
+
+prefix=/system
+sysconfdir=/data/adb/${MODULE_NAME}
+rundir=/data/adb/${MODULE_NAME}/run
+
+JUICITY=${MODULE_PATH}/${BIN_NAME}
+#PIDFILE=${rundir}/${BIN_NAME}.pid
+LOGFILE=${rundir}/${BIN_NAME}.log
+
+start_service(){
+    # Start Juicity
+    echo "starting $JUICITY... \c"; \
+    ${JUICITY} run --config ${sysconfdir}/config.json --log-file ${LOGFILE} --log-output file &
+
+    juicity_rc=$?
+    if [ $juicity_rc -ne 0 ]; then
+        echo "$0: Error ${juicity_rc} starting ${JUICITY}... bailing."
+        exit $juicity_rc
+    fi
+    echo done.
+
+}
+
+stop_service(){
+    PID=`ps -ef |grep -v grep |grep juicity-client| awk '{print $2}'`
+    if [ -n "$PID" ]; then
+        ${KILL} -9 ${PID}
+    fi
+}
+
+case $1 in
+
+'start')
+    start_service
+    ;;
+
+'stop')
+    stop_service
+    ;;
+
+'restart')
+    stop_service
+    start_service
+    ;;
+
+*)
+    echo "$0:  usage:  $0 {start|stop|restart}"
+    ;;
+esac
+
