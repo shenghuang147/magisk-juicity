@@ -2,6 +2,7 @@
 
 set -e
 
+MODULE_VERSION="1.0.1"
 VERSION="0.4.3"
 DOWNLOAD_LINK="https://github.com/juicity/juicity/releases/download"
 FULL_DOWNLOAD_LINK=""
@@ -32,10 +33,16 @@ unzip_pkg(){
 }
 
 pack_zip(){
-    local pack_name="magisk-juicity-${VERSION}-$1.zip"
+    local pack_name="magisk-juicity-${MODULE_VERSION}-$1.zip"
     rm -rf ${pack_name}
     zip -r -o -X -ll ${pack_name} ./ -x '.git/*' -x 'LICENSE' -x 'README.md' -x 'build.sh' -x '.github/*' -x ".gitignore" -x "temp.*" -x "*.zip"
 }
+
+set_prop(){
+    sed -i "s/version=.*(Juicity-v.*/version=${MODULE_VERSION}(Juicity-v${VERSION})/" module.prop
+}
+
+set_prop
 
 for arch in arm64 armv7; do
     set_dl_link ${arch}
