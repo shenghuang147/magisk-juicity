@@ -32,7 +32,7 @@ start_service(){
 }
 
 stop_service(){
-    PID=`ps -ef |grep -v grep |grep juicity-client| awk '{print $2}'`
+    PID=$(ps -ef |grep -v grep |grep juicity-client| awk '{print $2}')
     if [ -n "$PID" ]; then
         ${KILL} -9 ${PID}
     fi

@@ -2,14 +2,14 @@
 
 set -e
 
-MODULE_VERSION="1.0.1"
+MODULE_VERSION="1.0.2"
 VERSION="0.4.3"
 DOWNLOAD_LINK="https://github.com/juicity/juicity/releases/download"
 FULL_DOWNLOAD_LINK=""
 PKG_NAME=""
 
 create_temp_dir(){
-    TEMP_DIR=`mktemp -d temp.XXXXXX`
+    TEMP_DIR=$(mktemp -d temp.XXXXXX)
 }
 
 set_dl_link(){
